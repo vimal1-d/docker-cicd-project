@@ -10,7 +10,8 @@ pipeline {
 
         stage('Clone Code') {
             steps {
-                git 'https://github.com/vimal1-d/docker-cicd-project.git'
+                git branch: 'main',
+                url: 'https://github.com/vimal1-d/docker-cicd-project.git'
             }
         }
 
@@ -25,7 +26,12 @@ pipeline {
 
                 sh 'docker rm -f test-container || true'
 
-                sh 'docker run -d --name test-container -p 8081:80 $IMAGE_NAME:$TAG'
+                sh '''
+                docker run -d \
+                --name test-container \
+                -p 8081:80 \
+                $IMAGE_NAME:$TAG
+                '''
 
                 sh 'sleep 5'
 
@@ -35,6 +41,9 @@ pipeline {
 
         stage('Push To Docker Hub') {
             steps {
+
+                sh 'docker login -u vikaskumar12 -p 90459045@Vd'
+
                 sh 'docker push $IMAGE_NAME:$TAG'
             }
         }
@@ -44,7 +53,12 @@ pipeline {
 
                 sh 'docker rm -f mycontainer || true'
 
-                sh 'docker run -d --name mycontainer -p 80:80 $IMAGE_NAME:$TAG'
+                sh '''
+                docker run -d \
+                --name mycontainer \
+                -p 80:80 \
+                $IMAGE_NAME:$TAG
+                '''
             }
         }
     }
