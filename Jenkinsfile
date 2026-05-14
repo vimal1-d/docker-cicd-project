@@ -41,9 +41,6 @@ pipeline {
 
         stage('Push To Docker Hub') {
             steps {
-
-                sh 'docker login -u vikaskumar12 -p 90459045@Vd'
-
                 sh 'docker push $IMAGE_NAME:$TAG'
             }
         }
